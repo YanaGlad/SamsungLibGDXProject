@@ -9,13 +9,15 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
     Texture img;
-
+    Texture img2;
     int SCREEN_WIDTH;
     int SCREEN_HEIGHT;
 
     int xStart = 0;
+    int yStart = 0;
 
-    boolean xRight = true;
+    boolean xRight = true; // движемся ли вправо?
+    boolean yUp = true; // движемся ли вверх?
 
     int x = 0;
     int y = 0;
@@ -35,7 +37,29 @@ public class MyGdxGame extends ApplicationAdapter {
         batch.begin();
 
         batch.draw(img, x, y);
-        if (x < SCREEN_WIDTH - img.getWidth() && xRight) {
+
+        moveX();
+        moveY(yStart, img);
+
+        batch.end();
+    }
+
+    public void moveY(int yStart, Texture image) {
+        if (y < getEdgePointY(image) && yUp == true) {
+            y++;
+        } else {
+            yUp = false;
+        }
+
+        if (y > yStart && yUp == false) {
+            y--;
+        } else {
+            yUp = true;
+        }
+    }
+
+    public void moveX() {
+        if (x < getEdgePointX(img) && xRight) {
             x++;
         } else {
             xRight = false;
@@ -46,8 +70,14 @@ public class MyGdxGame extends ApplicationAdapter {
         } else {
             xRight = true;
         }
+    }
 
-        batch.end();
+    public int getEdgePointX(Texture image) {
+        return SCREEN_WIDTH - image.getWidth();
+    }
+
+    public int getEdgePointY(Texture image) {
+        return SCREEN_HEIGHT - image.getHeight();
     }
 
     @Override
