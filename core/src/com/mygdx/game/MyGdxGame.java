@@ -8,27 +8,33 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class MyGdxGame extends ApplicationAdapter {
     SpriteBatch batch;
-    Texture img;
-    Texture img2;
     int SCREEN_WIDTH;
     int SCREEN_HEIGHT;
 
     int xStart = 0;
     int yStart = 0;
 
-    boolean xRight = true; // движемся ли вправо?
-    boolean yUp = true; // движемся ли вверх?
-
-    int x = 0;
-    int y = 0;
+    MovingImage movingImage;
+    MovingImage movingImage2;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-        img = new Texture("badlogic.jpg");
+
+        movingImage = new MovingImage();
+        movingImage2 = new MovingImage();
+
+        movingImage.img = new Texture("badlogic.jpg");
+        movingImage2.img = new Texture("badlogic.jpg");
+
+        movingImage.speed = 5;
+        movingImage2.speed = 1;
 
         SCREEN_WIDTH = Gdx.graphics.getWidth();
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
+
+        movingImage2.x = movingImage2.getEdgePointX(SCREEN_WIDTH, movingImage2.img);
+        movingImage2.y = movingImage2.getEdgePointY(SCREEN_HEIGHT, movingImage2.img);
     }
 
     @Override
@@ -36,53 +42,22 @@ public class MyGdxGame extends ApplicationAdapter {
         ScreenUtils.clear(0, 0, 1, 1); ///rgb - red, green, blue, a - alhpa
         batch.begin();
 
-        batch.draw(img, x, y);
+        batch.draw(movingImage.img, movingImage.x, movingImage.y);
+        batch.draw(movingImage2.img, movingImage2.x, movingImage2.y);
 
-        moveX();
-        moveY(yStart, img);
+        movingImage.moveX(SCREEN_WIDTH, xStart);
+        movingImage.moveY(SCREEN_HEIGHT, yStart);
+
+        movingImage2.moveX(SCREEN_WIDTH, xStart);
+        movingImage2.moveY(SCREEN_HEIGHT, yStart);
 
         batch.end();
     }
 
-    public void moveY(int yStart, Texture image) {
-        if (y < getEdgePointY(image) && yUp == true) {
-            y++;
-        } else {
-            yUp = false;
-        }
-
-        if (y > yStart && yUp == false) {
-            y--;
-        } else {
-            yUp = true;
-        }
-    }
-
-    public void moveX() {
-        if (x < getEdgePointX(img) && xRight) {
-            x++;
-        } else {
-            xRight = false;
-        }
-
-        if (x > xStart && !xRight) {
-            x--;
-        } else {
-            xRight = true;
-        }
-    }
-
-    public int getEdgePointX(Texture image) {
-        return SCREEN_WIDTH - image.getWidth();
-    }
-
-    public int getEdgePointY(Texture image) {
-        return SCREEN_HEIGHT - image.getHeight();
-    }
 
     @Override
     public void dispose() {
         batch.dispose();
-        img.dispose();
+        movingImage.img.dispose();
     }
 }
