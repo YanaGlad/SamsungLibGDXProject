@@ -13,10 +13,8 @@ public class MyGdxGame extends ApplicationAdapter {
     int SCREEN_WIDTH;
     int SCREEN_HEIGHT;
 
-    int xStart = 0;
-    int yStart = 0;
-
-    MovingImage[] movingImages;
+    Astronaut astronaut;
+    Ufo[] ufos;
 
     Random random;
 
@@ -25,27 +23,26 @@ public class MyGdxGame extends ApplicationAdapter {
         batch = new SpriteBatch();
         random = new Random();
 
-        movingImages = new MovingImage[10];
-        movingImages[0] = new MovingImage();
-        movingImages[0].img = new Texture("badlogic.jpg");
-        movingImages[0].speed = 5;
-
-        movingImages[1] = new MovingImage();
-        movingImages[1].img = new Texture("badlogic.jpg");
-        movingImages[1].speed = 1;
-        movingImages[1].x = movingImages[1].getEdgePointX(SCREEN_WIDTH, movingImages[1].img);
-        movingImages[1].y = movingImages[1].getEdgePointY(SCREEN_HEIGHT, movingImages[1].img);
-
-        for (int i = 2; i < movingImages.length; i++) {
-            movingImages[i] = new MovingImage();
-            movingImages[i].img = new Texture("badlogic.jpg");
-            movingImages[i].speed = random.nextInt(1,  5);
-            movingImages[i].x = random.nextInt(200);
-            movingImages[i].y = random.nextInt(300);
-        }
-
         SCREEN_WIDTH = Gdx.graphics.getWidth();
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
+
+        astronaut = new Astronaut();
+        astronaut.texture = new Texture("astronaut.png");
+        astronaut.x = 100;
+        astronaut.y = 100;
+        astronaut.width = 100;
+        astronaut.height = 100;
+
+        ufos = new Ufo[100];
+        for (int i = 0; i < ufos.length; i++) {
+            ufos[i] = new Ufo();
+            ufos[i].width = 100;
+            ufos[i].height = 50;
+            ufos[i].texture = new Texture("ufo.png");
+            ufos[i].x = random.nextInt(10000);
+            ufos[i].y = random.nextInt(SCREEN_HEIGHT - ufos[i].height);
+            ufos[i].speed = random.nextInt(1, 5);
+        }
     }
 
     @Override
@@ -53,12 +50,14 @@ public class MyGdxGame extends ApplicationAdapter {
         ScreenUtils.clear(0, 0, 1, 1); ///rgb - red, green, blue, a - alhpa
         batch.begin();
 
-        for (int i = 0; i < movingImages.length; i++) {
-            batch.draw(movingImages[i].img, movingImages[i].x, movingImages[i].y);
+        batch.draw(astronaut.texture, astronaut.x, astronaut.y, astronaut.width, astronaut.height);
 
-            movingImages[i].moveX(SCREEN_WIDTH, xStart);
-            movingImages[i].moveY(SCREEN_HEIGHT, yStart);
+        for (int i = 0; i < ufos.length; i++) {
+            batch.draw(ufos[i].texture, ufos[i].x, ufos[i].y, 100, 50);
+
+            ufos[i].moveX();
         }
+
         batch.end();
     }
 
@@ -66,8 +65,9 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void dispose() {
         batch.dispose();
-        for (int i = 0; i < movingImages.length; i++) {
-            movingImages[i].img.dispose();
+        astronaut.texture.dispose();
+        for (int i = 0; i < ufos.length; i++) {
+            ufos[i].texture.dispose();
         }
     }
 }
