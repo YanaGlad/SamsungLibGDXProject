@@ -26,22 +26,24 @@ public class MyGdxGame extends ApplicationAdapter {
         SCREEN_WIDTH = Gdx.graphics.getWidth();
         SCREEN_HEIGHT = Gdx.graphics.getHeight();
 
-        astronaut = new Astronaut();
-        astronaut.texture = new Texture("astronaut.png");
-        astronaut.x = 100;
-        astronaut.y = 100;
-        astronaut.width = 100;
-        astronaut.height = 100;
+        astronaut = new Astronaut(
+                new Texture("astronaut.png"),
+                100,
+                100,
+                100,
+                100
+        );
 
         ufos = new Ufo[100];
         for (int i = 0; i < ufos.length; i++) {
-            ufos[i] = new Ufo();
-            ufos[i].width = 100;
-            ufos[i].height = 50;
-            ufos[i].texture = new Texture("ufo.png");
-            ufos[i].x = random.nextInt(10000);
-            ufos[i].y = random.nextInt(SCREEN_HEIGHT - ufos[i].height);
-            ufos[i].speed = random.nextInt(1, 5);
+            ufos[i] = new Ufo(
+                    new Texture("ufo.png"),
+                    random.nextInt(10000),
+                    random.nextInt(SCREEN_HEIGHT - 50),
+                    100,
+                    50,
+                    random.nextInt(1, 5)
+            );
         }
     }
 
