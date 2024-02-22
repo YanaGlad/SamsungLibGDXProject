@@ -2,6 +2,8 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -42,7 +44,7 @@ public class MyGdxGame extends ApplicationAdapter {
                     random.nextInt(SCREEN_HEIGHT - 50),
                     100,
                     50,
-                    random.nextInt(1, 5)
+                    random.nextInt( 5)
             );
         }
     }
@@ -60,9 +62,10 @@ public class MyGdxGame extends ApplicationAdapter {
             ufos[i].moveX();
         }
 
+        astronaut.move();
+
         batch.end();
     }
-
 
     @Override
     public void dispose() {
